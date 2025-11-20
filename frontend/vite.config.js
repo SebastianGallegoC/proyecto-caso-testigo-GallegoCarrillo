@@ -6,6 +6,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 9001,
+    host: '0.0.0.0',
     proxy: {
       '/api': {
         target: 'http://localhost:9000',
@@ -13,5 +14,10 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/api/, '')
       }
     }
+  },
+  build: {
+    outDir: 'dist',
+    sourcemap: false,
+    minify: 'terser',
   }
 })

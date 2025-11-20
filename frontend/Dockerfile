@@ -1,20 +1,31 @@
-# Dockerfile para el frontend React + Vite
-FROM node:18-alpine
+# Etapa 1: Build
+FROM node:18-alpine AS builder
 
-# Establecer directorio de trabajo
 WORKDIR /app
 
-# Copiar archivos de configuración de dependencias
+# Copiar package files
 COPY package*.json ./
 
 # Instalar dependencias
-RUN npm install
+RUN npm ci
 
-# Copiar el resto de los archivos
+# Copiar código fuente
 COPY . .
 
-# Exponer el puerto
+# Build para producción
+RUN npm run build
+
+# Etapa 2: Servir con nginx
+FROM nginx:alpine
+
+# Copiar build desde la etapa anterior
+COPY --from=builder /app/dist /usr/share/nginx/html
+
+# Copiar configuración de nginx
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Exponer puerto
 EXPOSE 9001
 
-# Comando por defecto (se puede sobrescribir en docker-compose)
-CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0", "--port", "9001"]
+# Comando para iniciar nginx
+CMD ["nginx", "-g", "daemon off;"]
