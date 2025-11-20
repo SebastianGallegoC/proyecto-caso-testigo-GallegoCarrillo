@@ -4,6 +4,94 @@ Este archivo contiene instrucciones para configurar los secretos necesarios en G
 
 ## 🔐 Secretos Requeridos
 
+### Para VPS Ubuntu (REQUERIDO - Deployment automático)
+
+Estos secretos son **OBLIGATORIOS** para que el deployment automático al VPS funcione.
+
+#### `VPS_HOST`
+
+- **Descripción**: IP pública o dominio de tu VPS Ubuntu
+- **Cómo obtenerlo**:
+  1. Conéctate a tu VPS por SSH
+  2. Ejecuta: `curl ifconfig.me`
+  3. Copia la IP que aparece
+- **Ejemplo**: `123.456.78.90` o `calculadora.tudominio.com`
+
+#### `VPS_USER`
+
+- **Descripción**: Usuario SSH para conectarse al VPS
+- **Cómo obtenerlo**:
+  1. Conéctate a tu VPS
+  2. Ejecuta: `whoami`
+  3. Copia el nombre de usuario
+- **Ejemplo**: `ubuntu`, `root`, o tu usuario personalizado
+
+#### `VPS_PATH`
+
+- **Descripción**: Ruta completa (absoluta) donde está la aplicación en el VPS
+- **Cómo obtenerlo**:
+  1. Conéctate a tu VPS
+  2. Navega al directorio de la app: `cd ~/calculadora-app`
+  3. Ejecuta: `pwd`
+  4. Copia la ruta completa
+- **Ejemplo**: `/home/ubuntu/calculadora-app`
+
+#### `VPS_SSH_KEY`
+
+- **Descripción**: Llave privada SSH para autenticación sin password
+- **Cómo obtenerlo**:
+  1. Conéctate a tu VPS
+  2. Genera una llave (si no tienes):
+     ```bash
+     ssh-keygen -t rsa -b 4096 -C "deploy-key" -f ~/.ssh/github_deploy_key -N ""
+     ```
+  3. Agrega la llave pública a authorized_keys:
+     ```bash
+     cat ~/.ssh/github_deploy_key.pub >> ~/.ssh/authorized_keys
+     chmod 600 ~/.ssh/authorized_keys
+     ```
+  4. Muestra la llave privada:
+     ```bash
+     cat ~/.ssh/github_deploy_key
+     ```
+  5. Copia TODO el contenido (incluyendo BEGIN y END)
+- **Formato**:
+  ```
+  -----BEGIN OPENSSH PRIVATE KEY-----
+  b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAABlwAAAAdzc2gtcn
+  NhAAAAAwEAAQAAAYEAx... (múltiples líneas)
+  -----END OPENSSH PRIVATE KEY-----
+  ```
+- ⚠️ **MUY IMPORTANTE**:
+  - Copia TODO el contenido, desde `-----BEGIN` hasta `-----END`
+  - Incluye todas las líneas intermedias
+  - NO agregues espacios ni saltos de línea extra
+
+### Resumen Rápido - Secretos VPS
+
+Ejecuta estos comandos en tu VPS para obtener todos los valores:
+
+```bash
+# 1. VPS_HOST
+echo "VPS_HOST: $(curl -s ifconfig.me)"
+
+# 2. VPS_USER
+echo "VPS_USER: $(whoami)"
+
+# 3. VPS_PATH (estando en el directorio de la app)
+cd ~/calculadora-app
+echo "VPS_PATH: $(pwd)"
+
+# 4. VPS_SSH_KEY (genera primero si no existe)
+ssh-keygen -t rsa -b 4096 -C "deploy-key" -f ~/.ssh/github_deploy_key -N ""
+cat ~/.ssh/github_deploy_key.pub >> ~/.ssh/authorized_keys
+chmod 600 ~/.ssh/authorized_keys
+echo "VPS_SSH_KEY (copia todo lo siguiente):"
+cat ~/.ssh/github_deploy_key
+```
+
+---
+
 ### Para Codecov (Opcional - Reportes de cobertura)
 
 **CODECOV_TOKEN**
@@ -16,7 +104,7 @@ Este archivo contiene instrucciones para configurar los secretos necesarios en G
   4. Copia el token desde Settings → General
 - Ejemplo: `a1b2c3d4-e5f6-7890-abcd-ef1234567890`
 
-### Para Docker Hub (Opcional - Deployment)
+### Para Docker Hub (Opcional - Solo si quieres publicar imágenes)
 
 **DOCKER_USERNAME**
 

@@ -101,6 +101,32 @@ docker-compose up --build
 - **Backend API**: http://localhost:9000
 - **API Docs**: http://localhost:9000/docs
 
+## 🚀 Deployment en VPS Ubuntu
+
+Este proyecto está configurado para **deployment automático** en un VPS Ubuntu mediante CI/CD.
+
+### Guía Rápida (15 minutos)
+
+1. **Preparar el VPS**: Ejecuta `setup-vps.sh` en tu servidor
+2. **Configurar Secretos en GitHub**:
+   - `VPS_HOST`: IP de tu VPS
+   - `VPS_USER`: Usuario SSH
+   - `VPS_PATH`: Ruta de la aplicación
+   - `VPS_SSH_KEY`: Llave privada SSH
+3. **Push a master**: El deployment se hace automáticamente
+
+**📖 Documentación completa**: Ver [`QUICK-START-VPS.md`](QUICK-START-VPS.md) y [`DEPLOYMENT.md`](DEPLOYMENT.md)
+
+### URLs después del deployment
+
+Una vez deployado en tu VPS:
+
+- Frontend: `http://TU_IP_VPS:9001`
+- Backend: `http://TU_IP_VPS:9000`
+- API Docs: `http://TU_IP_VPS:9000/docs`
+- **Backend API**: http://localhost:9000
+- **API Docs**: http://localhost:9000/docs
+
 **3. Detener los contenedores:**
 
 ```bash

@@ -55,3 +55,17 @@ dist-ssr/
 .env
 .env.local
 .env.*.local
+
+# SSH Keys (MUY IMPORTANTE - No subir llaves privadas)
+*.pem
+*.key
+id_rsa
+id_rsa.pub
+github_deploy_key
+github_deploy_key.pub
+.ssh/
+
+# VPS Deployment
+deploy_key
+deploy_key.pub
+authorized_keys
