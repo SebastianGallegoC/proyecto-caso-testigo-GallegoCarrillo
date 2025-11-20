@@ -143,8 +143,8 @@ jobs:
 
       - name: Test Docker Compose
         run: |
-          docker-compose --version
-          docker-compose config
+          docker compose version
+          docker compose config
 
   # Job 4: Security Scan
   security-scan:
@@ -206,7 +206,7 @@ jobs:
 
       - name: Start services with Docker Compose
         run: |
-          docker-compose up -d
+          docker compose up -d
           sleep 10
 
       - name: Check backend health
@@ -219,11 +219,11 @@ jobs:
 
       - name: Run API integration tests
         run: |
-          docker-compose exec -T backend pytest tests/test_api.py -v
+          docker compose exec -T backend pytest tests/test_api.py -v
 
       - name: Stop services
         if: always()
-        run: docker-compose down
+        run: docker compose down
 
   # Job 6: Build Success Notification
   build-success:
@@ -281,19 +281,19 @@ jobs:
             git pull origin master
             
             echo "🐳 Stopping current containers..."
-            docker-compose down || true
+            docker compose down || true
             
             echo "🔨 Building new images..."
-            docker-compose build --no-cache
+            docker compose build --no-cache
             
             echo "🚀 Starting containers..."
-            docker-compose up -d
+            docker compose up -d
             
             echo "🧹 Cleaning up old images..."
             docker image prune -f
             
             echo "✅ Checking container status..."
-            docker-compose ps
+            docker compose ps
             
             echo "🏥 Waiting for backend health check..."
             sleep 10
