@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import calculatorService from '../services/calculatorService';
 import './Calculator.css';
 
