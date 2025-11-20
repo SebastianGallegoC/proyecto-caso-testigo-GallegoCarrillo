@@ -1,12 +1,14 @@
 # Calculadora Avanzada - React + FastAPI
 
-![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)
+![CI/CD Pipeline](https://github.com/SebastianGallegoC/proyecto-caso-testigo-GallegoCarrillo/actions/workflows/ci-cd.yml/badge.svg)
+![Python](https://img.shields.io/badge/Python-3.11-blue.svg)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.109.0-green.svg)
 ![React](https://img.shields.io/badge/React-18.2.0-blue.svg)
 ![Docker](https://img.shields.io/badge/Docker-Ready-2496ED.svg)
 ![License](https://img.shields.io/badge/License-MIT-yellow.svg)
+![Tests](https://img.shields.io/badge/Tests-71%20passing-success.svg)
 
-Una calculadora moderna y completa con frontend en React y backend en FastAPI, implementando principios SOLID y patrones de diseño. **Completamente dockerizada** para facilitar el despliegue.
+Una calculadora moderna y completa con frontend en React y backend en FastAPI, implementando principios SOLID y patrones de diseño. **Completamente dockerizada** con **CI/CD automatizado** para facilitar el desarrollo y despliegue.
 
 ## 🚀 Características
 
@@ -394,9 +396,75 @@ class OperationFactory:
 - Mensajes de error descriptivos
 - Estados de carga en el frontend
 
-## 🚀 Construcción para Producción
+## 🚀 Deployment y Producción
 
-### Backend
+### CI/CD Pipeline
+
+Este proyecto cuenta con un pipeline de CI/CD completamente automatizado usando **GitHub Actions**. El pipeline se ejecuta automáticamente en cada push y pull request.
+
+#### Flujo de trabajo del CI/CD
+
+**1. Code Quality & Linting** 🔍
+
+- Linting del código Python con `flake8`
+- Verificación de formato con `black`
+- Linting del código React con ESLint
+
+**2. Backend Tests** 🧪
+
+- Ejecución de 71 tests unitarios e integración con pytest
+- Generación de reportes de cobertura de código
+- Upload de coverage reports a Codecov
+
+**3. Docker Build & Test** 🐳
+
+- Build de imagen Docker del backend
+- Build de imagen Docker del frontend
+- Validación de docker-compose.yml
+- Cache de capas de Docker para builds más rápidos
+
+**4. Security Scan** 🔒
+
+- Escaneo de vulnerabilidades con Trivy
+- Verificación de dependencias Python con Safety
+- Upload de resultados a GitHub Security
+
+**5. Integration Tests** 🔗
+
+- Tests de integración con servicios levantados
+- Verificación de endpoints de API
+- Validación de comunicación frontend-backend
+
+**6. Deployment (solo master/main)** 🚀
+
+- Build y push de imágenes a Docker Hub (opcional)
+- Deploy automático a producción
+- Notificación de éxito del deployment
+
+#### Configurar secretos en GitHub
+
+Para habilitar el deployment completo, configura estos secretos en tu repositorio:
+
+1. Ve a `Settings > Secrets and variables > Actions`
+2. Agrega los siguientes secretos:
+
+```
+CODECOV_TOKEN          # Token de Codecov (opcional)
+DOCKER_USERNAME        # Usuario de Docker Hub (opcional)
+DOCKER_PASSWORD        # Password/Token de Docker Hub (opcional)
+```
+
+#### Badges de estado
+
+El badge de CI/CD en el README muestra el estado actual del pipeline:
+
+- ✅ Verde: Todas las pruebas pasaron
+- ❌ Rojo: Alguna prueba falló
+- 🟡 Amarillo: Pipeline en ejecución
+
+### Deployment Manual
+
+#### Backend
 
 ```bash
 # Instalar dependencias de producción
@@ -406,7 +474,7 @@ pip install -r requirements.txt
 gunicorn app.main:app -w 4 -k uvicorn.workers.UvicornWorker
 ```
 
-### Frontend
+#### Frontend
 
 ```bash
 # Construir para producción
@@ -414,6 +482,44 @@ npm run build
 
 # Los archivos estarán en dist/
 ```
+
+### Deployment con Docker
+
+#### Opción 1: Docker Hub
+
+```bash
+# Backend
+docker build -t tu-usuario/calculadora-backend:latest ./backend
+docker push tu-usuario/calculadora-backend:latest
+
+# Frontend
+docker build -t tu-usuario/calculadora-frontend:latest ./frontend
+docker push tu-usuario/calculadora-frontend:latest
+```
+
+#### Opción 2: GitHub Container Registry
+
+```bash
+# Login
+echo $GITHUB_TOKEN | docker login ghcr.io -u USERNAME --password-stdin
+
+# Backend
+docker build -t ghcr.io/tu-usuario/calculadora-backend:latest ./backend
+docker push ghcr.io/tu-usuario/calculadora-backend:latest
+
+# Frontend
+docker build -t ghcr.io/tu-usuario/calculadora-frontend:latest ./frontend
+docker push ghcr.io/tu-usuario/calculadora-frontend:latest
+```
+
+### Plataformas de deployment recomendadas
+
+- **AWS ECS/EKS**: Para despliegue enterprise con alta disponibilidad
+- **Google Cloud Run**: Serverless con escalado automático
+- **Heroku**: Deployment simple con Docker
+- **DigitalOcean App Platform**: Económico y fácil de usar
+- **Railway**: Deployment moderno con soporte para Docker Compose
+- **Render**: Free tier generoso con soporte para servicios múltiples
 
 ## 📝 Licencia
 
