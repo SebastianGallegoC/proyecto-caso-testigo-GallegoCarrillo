@@ -4,7 +4,11 @@
  */
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:9000';
+// Usar variable de entorno o detectar automáticamente
+const API_BASE_URL = import.meta.env.VITE_API_URL || 
+                     (typeof window !== 'undefined' && window.location.hostname !== 'localhost' 
+                       ? `http://${window.location.hostname}:9000`
+                       : 'http://localhost:9000');
 
 // Instancia configurada de axios
 const apiClient = axios.create({
